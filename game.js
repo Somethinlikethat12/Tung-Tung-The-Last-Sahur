@@ -26,7 +26,7 @@ const weapon = new THREE.Group();
 const weaponDrum = new THREE.Mesh(new THREE.CylinderGeometry(.38, .38, .2, 16), mat(0xffcf57)); weaponDrum.rotation.z = Math.PI / 2; weaponDrum.position.set(.42, -.28, -.7); weapon.add(weaponDrum);
 const weaponStick = new THREE.Mesh(new THREE.CylinderGeometry(.045, .045, .95, 8), mat(0xf6e0af)); weaponStick.position.set(.62, -.05, -.72); weaponStick.rotation.z = -.65; weapon.add(weaponStick);
 camera.add(weapon); scene.add(camera);
-const bullet = new THREE.mesh(new TH
+const bullet = new THREE.mesh(new THREE.SphereGeometry(.5,12,12)
 function enemyMesh() { const g = new THREE.Group(); const m = new THREE.Mesh(new THREE.BoxGeometry(1, 1.5, 1), mat(0x5b3d83)); m.position.y = .75; m.castShadow = true; g.add(m); [-.22, .22].forEach(x => { const e = new THREE.Mesh(new THREE.SphereGeometry(.1, 8, 8), mat(0xff477e, 0xff477e)); e.position.set(x, 1.05, -.5); g.add(e); }); return g; }
 
 let enemies = [], bowls = [], bullets = [], running = false, choosing = false;
