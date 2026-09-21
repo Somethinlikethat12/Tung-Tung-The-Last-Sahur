@@ -15,16 +15,11 @@
         "three/addons/": "https://jsdelivr.net"
       }
     }
-    import * as THREE from 'three';
-    import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
-
-    const scene = new THREE.Scene(); 
-    scene.background = new THREE.Color(0x090b20); 
-    scene.fog = new THREE.Fog(0x090b20, 18, 58);
-    // ... rest of your code continues perfectly below
+  
   </script>
 </head>
 <body>
+  
   <div id="game"></div>
   <div id="hud" class="hud hidden"><div class="top"><div class="brand"><h1>⚡ TUNG TUNG</h1><small>THE LAST SAHUR · NIGHT 01</small></div><div class="panel stats"><div class="row"><b>HEART</b><span id="heart">100 / 100</span></div><div class="bar"><div id="health" class="fill hp"></div></div><div class="row"><b>DRUM POWER</b><span id="power">0 / 5</span></div><div class="bar"><div id="xp" class="fill xp"></div></div><div class="row"><small id="wave">WAVE 1</small><small id="score">SCORE 0</small></div></div></div><div class="bottom"><div class="panel help"><kbd>WASD</kbd> move · <kbd>CLICK</kbd>/<kbd>SPACE</kbd> bonk · <kbd>SHIFT</kbd> dash</div><div id="message" class="msg">Protect the last sahur!</div></div></div>
   <div id="start" class="screen"><div class="card"><h2>TUNG TUNG<br>THE LAST SAHUR</h2><p>Survive the creature swarm, collect glowing sahur bowls, and keep the final drumbeat alive.</p><button id="startButton">START THE DRUMBEAT</button></div></div>
