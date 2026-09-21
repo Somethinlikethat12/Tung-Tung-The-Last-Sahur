@@ -38,9 +38,9 @@ let yaw = 0, pitch = 0, mouseLocked = false;
 const savedMeta = JSON.parse(localStorage.getItem('tungTungMeta') || '{"damage":0,"speed":0,"health":0,"dash":0}');
 const upgrades = [
   { name: 'IRON DRUM', text: '+1 permanent bonk damage', key: 'damage', apply: () => { savedMeta.damage++; damage++; } },
-  { name: 'QUICK FEET', text: '+8% permanent movement speed', key: 'speed', apply: () => { savedMeta.speed++; moveSpeed *= 1.08; } },
+  { name: 'QUICK FEET', text: '+8% permanent movement speed', key: 'speed', apply: () => { savedMeta.speed++; moveSpeed *= 1.1; } },
   { name: 'BIG HEART', text: '+15 permanent maximum heart', key: 'health', apply: () => { savedMeta.health++; maxHp += 15; hp += 15; } },
-  { name: 'SECOND WIND', text: 'Unlock a stronger dash', key: 'dash', apply: () => { savedMeta.dash++; } }
+  { name: 'SECOND WIND', text: 'Unlock a stronger dash', key: 'dash', apply: () => { savedMeta.dash+=7; } }
 ];
 function applyMeta() { damage = 1 + savedMeta.damage; moveSpeed = 5 * (1 + savedMeta.speed * .08); maxHp = 100 + savedMeta.health * 15; hp = maxHp; }
 function saveMeta() { localStorage.setItem('tungTungMeta', JSON.stringify(savedMeta)); }
@@ -69,7 +69,7 @@ function move(dt) {
   if (keys.w) dir.add(forward); if (keys.s) dir.sub(forward); if (keys.a) dir.add(left); if (keys.d) dir.sub(left);
   if (dir.lengthSq()) { dir.normalize(); player.position.addScaledVector(dir, moveSpeed * dt); player.position.x = THREE.MathUtils.clamp(player.position.x, -17, 17); player.position.z = THREE.MathUtils.clamp(player.position.z, -17, 17); }
   // Dash is a burst on key press, not a faster sustained sprint.
-  if (keys.shift && !keys.shiftUsed && dashCooldown <= 0 && dir.lengthSq()) { keys.shiftUsed = true; const burst = dir.clone().normalize().multiplyScalar(4.5 + savedMeta.dash * 1.5); player.position.add(burst); dashCooldown = Math.max(.7, 1.8 - savedMeta.dash * .15); }
+  if (keys.shift && !keys.shiftUsed && dashCooldown <= 0 && dir.lengthSq()) { keys.shiftUsed = true; const burst = dir.clone().normalize().multiplyScalar(4.5 + savedMeta.dash * 1.5); player.position.add(burst); dashCooldown = Math.max(.07, .08 - savedMeta.dash * .05); }
   if (!keys.shift) keys.shiftUsed = false;
 }
 
