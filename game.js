@@ -26,12 +26,12 @@ const weapon = new THREE.Group();
 const weaponDrum = new THREE.Mesh(new THREE.CylinderGeometry(.38, .38, .2, 16), mat(0xffcf57)); weaponDrum.rotation.z = Math.PI / 2; weaponDrum.position.set(.42, -.28, -.7); weapon.add(weaponDrum);
 const weaponStick = new THREE.Mesh(new THREE.CylinderGeometry(.045, .045, .95, 8), mat(0xf6e0af)); weaponStick.position.set(.62, -.05, -.72); weaponStick.rotation.z = -.65; weapon.add(weaponStick);
 camera.add(weapon); scene.add(camera);
-
+const bullet = new THREE.mesh(new TH
 function enemyMesh() { const g = new THREE.Group(); const m = new THREE.Mesh(new THREE.BoxGeometry(1, 1.5, 1), mat(0x5b3d83)); m.position.y = .75; m.castShadow = true; g.add(m); [-.22, .22].forEach(x => { const e = new THREE.Mesh(new THREE.SphereGeometry(.1, 8, 8), mat(0xff477e, 0xff477e)); e.position.set(x, 1.05, -.5); g.add(e); }); return g; }
 
-let enemies = [], bowls = [], running = false, choosing = false;
+let enemies = [], bowls = [], bullets = [], running = false, choosing = false;
 let hp = 100, maxHp = 100, damage = 1, moveSpeed = 5, xp = 0, level = 1, score = 0, wave = 1;
-let spawnTimer = 0, attackTimer = 0, swingTime = 1, dashCooldown = 0;
+let spawnTimer = 0, attackTimer = 0, swingTime = 1, rangedcooldown = 0, dashCooldown = 0;
 const keys = {};
 let yaw = 0, pitch = 0, mouseLocked = false;
 
@@ -57,6 +57,13 @@ function attack() {
   const forward = new THREE.Vector3(-Math.sin(yaw), 0, -Math.cos(yaw));
   enemies.slice().forEach(e => { const offset = e.position.clone().sub(player.position); const dist = offset.length(); if (dist < 3.5 && forward.dot(offset.normalize()) > .05) { e.userData.hp -= damage; if (e.userData.hp <= 0) { scene.remove(e); enemies = enemies.filter(x => x !== e); score += 100 + wave * 10; gainXp(22); } } });
   updateHud();
+}
+function ranged(){
+  if (!running || choosing || attackTimer > 0) return;
+  rangedcooldown = .5; 
+  
+
+
 }
 function finish(win) { running = false; document.exitPointerLock?.(); $('hud').classList.add('hidden'); $('gameover').classList.remove('hidden'); $('result').textContent = win ? 'SAHUR SAVED!' : 'THE DRUM WENT QUIET'; $('summary').textContent = win ? `You reached level ${level}, wave ${wave}, and scored ${score}. Permanent unlocks are safe.` : `The swarm got through at level ${level}. Your permanent unlocks are safe. Score: ${score}.`; }
 function reset() { enemies.forEach(e => scene.remove(e)); bowls.forEach(b => scene.remove(b)); enemies = []; bowls = []; hp = 100; xp = 0; level = 1; score = 0; wave = 1; spawnTimer = 0; attackTimer = 0; dashCooldown = 0; player.position.set(0, .5, 0); yaw = 0; pitch = 0; applyMeta(); running = true; choosing = false; $('start').classList.add('hidden'); $('gameover').classList.add('hidden'); $('upgrade').classList.add('hidden'); $('hud').classList.remove('hidden'); weapon.visible = true; for (let i = 0; i < 4; i++) spawnEnemy(); for (let i = 0; i < 2; i++) spawnBowl(); $('message').textContent = 'Protect the last sahur!'; updateHud(); renderer.domElement.requestPointerLock(); }
