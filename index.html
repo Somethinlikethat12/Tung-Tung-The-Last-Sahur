@@ -3,78 +3,72 @@
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>Tung Tung: The First Sahur</title>
+    <title>Tung Tung: The Last Sahur</title>
     <link rel="stylesheet" href="style.css">
   </head>
   <body>
-    <div id="game"> </div>
-    <div id="hud" class="hud hidden"><div class="top">
-      <div class="brand">
-        <h1>⚡ TUNG TUNG</h1><small>THE LAST SAHUR · NIGHT 01</small>
+    <div id="game"></div>
+
+    <div id="hud" class="hud hidden">
+      <div class="top">
+        <div class="brand">
+          <h1>⚡ TUNG TUNG</h1>
+          <small>THE LAST SAHUR · NIGHT 01</small>
+        </div>
+
+        <div class="panel stats">
+          <div class="row">
+            <b>HEART</b>
+            <span id="heart">100 / 100</span>
+          </div>
+          <div class="bar"><div id="health" class="fill hp"></div></div>
+
+          <div class="row">
+            <b>DRUM POWER</b>
+            <span id="power">0 / 100</span>
+          </div>
+          <div class="bar"><div id="xp" class="fill xp"></div></div>
+
+          <div class="row">
+            <small id="level">LEVEL 1</small>
+            <small id="wave">WAVE 1</small>
+            <small id="score">SCORE 0</small>
+          </div>
+        </div>
       </div>
-      
-      <div class="panel stats">
-        <div class="row">
-          <b>HEART</b>
-          <span id="heart">100 / 100</span>
+
+      <div class="bottom">
+        <div class="panel help">
+          <kbd>WASD</kbd> move · <kbd>MOUSE</kbd> look · <kbd>CLICK</kbd>/<kbd>SPACE</kbd> bonk · <kbd>F</kbd> drum shot · <kbd>SHIFT</kbd> dash
         </div>
-        <div class="bar">
-          <div id="health" class="fill hp">
-            
-          </div>
-        </div>
-        <div class="row">
-          <b>DRUM POWER</b>
-          <span id="power">0 / 100</span>
-        </div>
-        <div class="bar">
-          <div id="xp" class="fill xp">
-            
-          </div>
-        </div>
-        <div class="row">
-          <small id="level">
-            LEVEL 1</small>
-          <small id="wave">WAVE 1</small>
-          <small id="score">SCORE 0</small></div></div></div><div class="bottom">
-            <div class="panel help">
-              <kbd>WASD</kbd> move · <kbd>MOUSE</kbd> look · <kbd>CLICK</kbd>/<kbd>SPACE</kbd> bonk · <kbd>SHIFT</kbd> dash</div>
-            <div id="message" class="msg">
-              Protect the last sahur!
-            </div>
-          </div>
+        <div id="message" class="msg">Protect the last sahur!</div>
+      </div>
     </div>
+
     <div id="start" class="screen">
       <div class="card">
-        <h2>TUNG TUNG<br>
-          THE LAST SAHUR</h2>
+        <h2>TUNG TUNG<br>THE LAST SAHUR</h2>
         <p>Survive the creature swarm, collect glowing sahur bowls, and keep the final drumbeat alive.</p>
-        <button id="startButton">
-          START THE DRUMBEAT
-        </button>
+        <button id="startButton">START THE DRUMBEAT</button>
       </div>
     </div>
+
     <div id="upgrade" class="screen hidden">
       <div class="card">
         <h2>LEVEL UP!</h2>
         <p>Choose your next blessing:</p>
-        <div id="upgradeChoices" class="choices">
-          
-        </div>
+        <div id="upgradeChoices" class="choices"></div>
       </div>
     </div>
+
     <div id="gameover" class="screen hidden">
-      <div class="card"><h2 id="result">
-        
-      </h2>
-        <p id="summary">
-          
-        </p>
+      <div class="card">
+        <h2 id="result"></h2>
+        <p id="summary"></p>
         <button id="again">PLAY AGAIN</button>
       </div>
     </div>
-    <script type="module" src="game.js">
-      
-    </script>
+
+    <script type="module" src="game.js"></script>
   </body>
 </html> 
