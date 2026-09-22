@@ -25,7 +25,7 @@ const mat = (color, emissive = 0) => new THREE.MeshStandardMaterial({
   roughness: 0.8,
   metalness: 0.12,
   emissive,
-  emissiveIntensity: emissive ? 1.4 : 0,
+  emissiveIntensity: emissive ? 1.4 : 0,)
 });
 
 const floor = new THREE.Mesh(new THREE.CylinderGeometry(25, 25, 0.4, 64), mat(0x15183b));
