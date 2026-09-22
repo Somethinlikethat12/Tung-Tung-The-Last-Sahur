@@ -121,6 +121,10 @@ let swingTime = 0;
 let rangedCooldown = 0;
 let dashCooldown = 0;
 let shake = 0;
+let jumpVelocity = 0;
+let isGrounded = true;
+let coyoteTime = 0;
+let jumpBuffer = 0;
 const keys = {};
 let yaw = 0;
 let pitch = 0;
@@ -299,6 +303,16 @@ function finish(win) {
     : `The swarm got through at level ${level}. Your permanent unlocks are safe. Score: ${score}.`;
 }
 
+function jump() {
+  if (!running || choosing) return;
+  if (isGrounded || coyoteTime > 0) {
+    jumpVelocity = 7.2 + Math.min(2.4, savedMeta.dash * 0.12);
+    isGrounded = false;
+    coyoteTime = 0;
+    $('message').textContent = 'Parkour jump!';
+  }
+}
+
 function reset() {
   enemies.forEach((enemy) => scene.remove(enemy));
   bowls.forEach((bowl) => scene.remove(bowl));
@@ -317,6 +331,10 @@ function reset() {
   rangedCooldown = 0;
   dashCooldown = 0;
   shake = 0;
+  jumpVelocity = 0;
+  isGrounded = true;
+  coyoteTime = 0;
+  jumpBuffer = 0;
   player.position.set(0, 0.5, 0);
   yaw = 0;
   pitch = 0;
@@ -350,15 +368,19 @@ function move(dt) {
 
   if (dir.lengthSq() > 0) {
     dir.normalize();
-    player.position.addScaledVector(dir, moveSpeed * dt);
+    const airScale = isGrounded ? 1 : 0.72;
+    player.position.addScaledVector(dir, moveSpeed * airScale * dt);
     player.position.x = THREE.MathUtils.clamp(player.position.x, -17, 17);
     player.position.z = THREE.MathUtils.clamp(player.position.z, -17, 17);
   }
 
-  if (keys.shift && !keys.shiftUsed && dashCooldown <= 0 && dir.lengthSq() > 0) {
+  if (keys.shift && !keys.shiftUsed && dir.lengthSq() > 0 && dashCooldown <= 0) {
     keys.shiftUsed = true;
-    const burst = dir.clone().normalize().multiplyScalar(4.5 + savedMeta.dash * 1.1);
+    const burst = dir.clone().normalize().multiplyScalar(4.8 + savedMeta.dash * 1.1 + (isGrounded ? 2 : 0));
     player.position.add(burst);
+    player.position.x = THREE.MathUtils.clamp(player.position.x, -17, 17);
+    player.position.z = THREE.MathUtils.clamp(player.position.z, -17, 17);
+    if (!isGrounded) jumpVelocity = Math.max(jumpVelocity, 3.2);
     dashCooldown = Math.max(0.65, 1.2 - savedMeta.dash * 0.06);
     shake = 0.18;
   }
@@ -416,7 +438,9 @@ addEventListener('keydown', (event) => {
   const key = event.key.toLowerCase();
   keys[key] = true;
 
-  if (event.code === 'Space') attack();
+  if (event.code === 'Space') {
+    jumpBuffer = 0.18;
+  }
   if (key === 'f' || key === 'q' || key === 'e') ranged();
 });
 
@@ -456,6 +480,26 @@ function loop(now) {
     attackTimer -= dt;
     spawnTimer -= dt;
     wave = Math.max(1, 1 + Math.floor(score / 450) + Math.floor(level / 2));
+
+    coyoteTime = isGrounded ? 0.12 : Math.max(0, coyoteTime - dt);
+    jumpBuffer = Math.max(0, jumpBuffer - dt);
+    if (jumpBuffer > 0 && (isGrounded || coyoteTime > 0)) {
+      jump();
+      jumpBuffer = 0;
+    }
+
+    if (!isGrounded) {
+      jumpVelocity -= 19 * dt;
+      player.position.y += jumpVelocity * dt;
+    }
+
+    if (player.position.y <= 0.5) {
+      player.position.y = 0.5;
+      jumpVelocity = 0;
+      isGrounded = true;
+    } else {
+      isGrounded = false;
+    }
 
     if (spawnTimer <= 0) {
       spawnTimer = Math.max(1.4, 4.8 - wave * 0.28);
